@@ -54,17 +54,42 @@ export function useRealtimeTyping(options: UseRealtimeTypingOptions) {
   );
 
   const socketRef = useRef<PartySocket | null>(null);
+  const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isTypist = role === 'typist';
+
+  const retryConnection = useCallback(() => {
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+    }
+
+    retryTimeoutRef.current = setTimeout(() => {
+      console.log('Retrying connection...');
+      if (socketRef.current) {
+        socketRef.current.close();
+        socketRef.current = null;
+      }
+      // Trigger a re-render to attempt reconnection
+      setRealtimeState(prev => ({
+        ...prev,
+        connectionError: 'Retrying connection...',
+      }));
+    }, 3000);
+  }, []);
 
   const connect = useCallback(() => {
     if (!enabled || socketRef.current)
       return;
 
     try {
+      // Use wss for production (HTTPS) and ws for development
+      const protocol = import.meta.env.DEV ? 'ws' : 'wss';
+
+      console.log('Connecting to PartyKit:', { host, room: roomId, protocol, role, userId });
+
       const socket = new PartySocket({
         host,
         room: roomId,
-        protocol: 'ws',
+        protocol,
         query: {
           role,
           userId,
@@ -72,6 +97,7 @@ export function useRealtimeTyping(options: UseRealtimeTypingOptions) {
       });
 
       socket.addEventListener('open', () => {
+        console.log('PartyKit connection established successfully');
         setRealtimeState(prev => ({
           ...prev,
           isConnected: true,
@@ -143,20 +169,27 @@ export function useRealtimeTyping(options: UseRealtimeTypingOptions) {
       });
 
       socket.addEventListener('error', (error) => {
-        console.error('Error:', error);
+        console.error('WebSocket error:', error);
         setRealtimeState(prev => ({
           ...prev,
           isConnected: false,
-          connectionError: 'Connection error occurred',
+          connectionError: `Connection failed: ${error.type || 'Unknown error'}`,
         }));
+        retryConnection();
       });
 
-      socket.addEventListener('close', () => {
-        console.error('Socket closed');
+      socket.addEventListener('close', (event) => {
+        console.log('WebSocket closed:', event.code, event.reason);
         setRealtimeState(prev => ({
           ...prev,
           isConnected: false,
+          connectionError: event.code !== 1000 ? `Connection closed: ${event.reason || 'Unknown reason'}` : null,
         }));
+
+        // Retry connection if it wasn't a normal closure
+        if (event.code !== 1000) {
+          retryConnection();
+        }
       });
 
       socketRef.current = socket;
@@ -171,6 +204,11 @@ export function useRealtimeTyping(options: UseRealtimeTypingOptions) {
   }, [enabled, host, roomId, role, userId, isTypist]);
 
   const disconnect = useCallback(() => {
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+      retryTimeoutRef.current = null;
+    }
+
     if (socketRef.current) {
       socketRef.current.close();
       socketRef.current = null;
