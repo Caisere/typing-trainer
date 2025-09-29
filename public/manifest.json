@@ -1,0 +1,31 @@
+{
+  "short_name": "Typing Trainer",
+  "name": "Real-time Typing Trainer",
+  "description": "A real-time typing trainer with live spectator mode and collaborative typing sessions",
+  "icons": [
+    {
+      "src": "https://fav.farm/🇳🇬",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "https://fav.farm/🇳🇬",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://fav.farm/🇳🇬",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#3b82f6",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "categories": ["education", "productivity", "utilities"],
+  "lang": "en",
+  "scope": "/",
+  "id": "typing-trainer-app"
+}
