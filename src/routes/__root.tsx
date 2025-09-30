@@ -38,6 +38,10 @@ export const Route = createRootRoute({
         content: generateDefaultOGImageUrl(),
       },
       {
+        property: 'og:logo',
+        content: 'https://deploy-preview-3--realtime-typing-trainer.netlify.app/favicon.ico',
+      },
+      {
         name: 'twitter:card',
         content: 'summary_large_image',
       },

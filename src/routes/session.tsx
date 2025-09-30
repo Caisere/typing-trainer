@@ -44,6 +44,10 @@ export const Route = createFileRoute('/session')({
         content: generateSessionOGImageUrl(match.search.sessionId),
       },
       {
+        property: 'og:logo',
+        content: 'https://deploy-preview-3--realtime-typing-trainer.netlify.app/favicon.ico',
+      },
+      {
         name: 'twitter:card',
         content: 'summary_large_image',
       },
