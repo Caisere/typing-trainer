@@ -12,6 +12,11 @@ export default defineNitroConfig({
     wasm: true,
   },
 
+  // Prerender all routes for static generation
+  prerender: {
+    routes: ['/'],
+  },
+
   // Route rules for better caching and performance
   routeRules: {
     '/api/og/**': {
@@ -28,6 +33,10 @@ export default defineNitroConfig({
         'access-control-allow-methods': 'GET, OPTIONS',
         'access-control-allow-headers': 'Content-Type, Authorization',
       },
+    },
+    // Prerender all frontend routes
+    '/**': {
+      prerender: true,
     },
   },
 });
