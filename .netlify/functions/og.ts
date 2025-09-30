@@ -1,5 +1,3 @@
-import { ImageResponse } from '@vercel/og';
-
 export async function handler(event: any) {
   try {
     const query = new URLSearchParams(event.queryStringParameters || {});
@@ -42,185 +40,72 @@ export async function handler(event: any) {
 
     const styles = getTypeStyles(type);
 
-    // Create the JSX element structure
-    const element = {
-      type: 'div',
-      key: 'og-image',
-      props: {
-        style: {
-          height: '100%',
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: styles.bgColor,
-          backgroundImage: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
-          fontFamily: 'system-ui, -apple-system, sans-serif',
-          position: 'relative',
-        },
-        children: [
-          // Background pattern
-          {
-            type: 'div',
-            props: {
-              style: {
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: 'radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)',
-              },
-            },
-          },
-          // Main content container
-          {
-            type: 'div',
-            props: {
-              style: {
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'rgba(255,255,255,0.95)',
-                borderRadius: '24px',
-                padding: '60px 80px',
-                boxShadow: '0 25px 50px rgba(0,0,0,0.15)',
-                maxWidth: '900px',
-                textAlign: 'center',
-                position: 'relative',
-                zIndex: '1',
-              },
-              children: [
-                // Icon
-                {
-                  type: 'div',
-                  props: {
-                    style: {
-                      fontSize: '100px',
-                      marginBottom: '30px',
-                      filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))',
-                    },
-                    children: styles.icon,
-                  },
-                },
-                // Title
-                {
-                  type: 'div',
-                  props: {
-                    style: {
-                      fontSize: '56px',
-                      fontWeight: 'bold',
-                      color: styles.accentColor,
-                      marginBottom: '24px',
-                      lineHeight: '1.2',
-                      textShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                    },
-                    children: title,
-                  },
-                },
-                // Description
-                {
-                  type: 'div',
-                  props: {
-                    style: {
-                      fontSize: '32px',
-                      color: '#374151',
-                      marginBottom: '40px',
-                      lineHeight: '1.4',
-                      maxWidth: '700px',
-                    },
-                    children: description,
-                  },
-                },
-                // Session ID if available
-                ...(sessionId
-                  ? [{
-                      type: 'div',
-                      props: {
-                        style: {
-                          fontSize: '24px',
-                          color: '#6B7280',
-                          backgroundColor: '#F3F4F6',
-                          padding: '16px 32px',
-                          borderRadius: '16px',
-                          fontFamily: 'monospace',
-                          border: '2px solid #E5E7EB',
-                          marginBottom: '30px',
-                        },
-                        children: `Session: ${sessionId}`,
-                      },
-                    }]
-                  : []),
-                // Footer
-                {
-                  type: 'div',
-                  props: {
-                    style: {
-                      fontSize: '24px',
-                      color: '#9CA3AF',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                    },
-                    children: '🌐 Real-time Typing Practice',
-                  },
-                },
-              ],
-            },
-          },
-          // Decorative elements
-          {
-            type: 'div',
-            props: {
-              style: {
-                position: 'absolute',
-                top: '50px',
-                right: '50px',
-                width: '100px',
-                height: '100px',
-                borderRadius: '50%',
-                backgroundColor: 'rgba(255,255,255,0.1)',
-                zIndex: '0',
-              },
-            },
-          },
-          {
-            type: 'div',
-            props: {
-              style: {
-                position: 'absolute',
-                bottom: '50px',
-                left: '50px',
-                width: '60px',
-                height: '60px',
-                borderRadius: '50%',
-                backgroundColor: 'rgba(255,255,255,0.08)',
-                zIndex: '0',
-              },
-            },
-          },
-        ],
-      },
-    };
+    // Create SVG-based OG image
+    const svg = `
+      <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:${styles.bgColor};stop-opacity:1" />
+            <stop offset="100%" style="stop-color:${styles.accentColor};stop-opacity:1" />
+          </linearGradient>
+          <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.15)"/>
+          </filter>
+        </defs>
 
-    // Generate OG image using @vercel/og
-    const response = new ImageResponse(element, {
-      width: 1200,
-      height: 630,
-      headers: {
-        'Cache-Control': 'public, max-age=3600, s-maxage=86400',
-      },
-    });
+        <!-- Background -->
+        <rect width="1200" height="630" fill="url(#bg)"/>
+
+        <!-- Background pattern -->
+        <circle cx="240" cy="504" r="100" fill="rgba(255,255,255,0.1)"/>
+        <circle cx="960" cy="126" r="60" fill="rgba(255,255,255,0.08)"/>
+
+        <!-- Main content container -->
+        <rect x="150" y="90" width="900" height="450" rx="24" fill="rgba(255,255,255,0.95)" filter="url(#shadow)"/>
+
+        <!-- Icon -->
+        <text x="600" y="200" font-family="system-ui, -apple-system, sans-serif" font-size="100" text-anchor="middle" fill="${styles.accentColor}">
+          ${styles.icon}
+        </text>
+
+        <!-- Title -->
+        <text x="600" y="280" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="bold" text-anchor="middle" fill="${styles.accentColor}">
+          ${title.length > 30 ? `${title.substring(0, 30)}...` : title}
+        </text>
+
+        <!-- Description -->
+        <text x="600" y="330" font-family="system-ui, -apple-system, sans-serif" font-size="28" text-anchor="middle" fill="#374151">
+          ${description.length > 50 ? `${description.substring(0, 50)}...` : description}
+        </text>
+
+        ${sessionId
+          ? `
+        <!-- Session ID -->
+        <rect x="400" y="360" width="400" height="40" rx="16" fill="#F3F4F6" stroke="#E5E7EB" stroke-width="2"/>
+        <text x="600" y="385" font-family="monospace" font-size="20" text-anchor="middle" fill="#6B7280">
+          Session: ${sessionId}
+        </text>
+        `
+          : ''}
+
+        <!-- Footer -->
+        <text x="600" y="480" font-family="system-ui, -apple-system, sans-serif" font-size="24" text-anchor="middle" fill="#9CA3AF">
+          🌐 Real-time Typing Practice
+        </text>
+      </svg>
+    `;
+
+    // Convert SVG to PNG using a simple approach
+    const svgBuffer = Buffer.from(svg, 'utf-8');
 
     return {
       statusCode: 200,
       headers: {
-        'Content-Type': 'image/png',
+        'Content-Type': 'image/svg+xml',
         'Cache-Control': 'public, max-age=3600, s-maxage=86400',
       },
-      body: response.body,
+      body: svgBuffer.toString('base64'),
+      isBase64Encoded: true,
     };
   }
   catch (e: any) {
