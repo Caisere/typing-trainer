@@ -93,7 +93,7 @@ export default defineEventHandler(async (event) => {
                 maxWidth: '900px',
                 textAlign: 'center',
                 position: 'relative',
-                zIndex: 1,
+                zIndex: '1',
               },
               children: [
                 // Icon
@@ -185,7 +185,7 @@ export default defineEventHandler(async (event) => {
                 height: '100px',
                 borderRadius: '50%',
                 backgroundColor: 'rgba(255,255,255,0.1)',
-                zIndex: 0,
+                zIndex: '0',
               },
             },
           },
@@ -200,7 +200,7 @@ export default defineEventHandler(async (event) => {
                 height: '60px',
                 borderRadius: '50%',
                 backgroundColor: 'rgba(255,255,255,0.08)',
-                zIndex: 0,
+                zIndex: '0',
               },
             },
           },
