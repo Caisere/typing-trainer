@@ -3,9 +3,9 @@ import { defineNitroConfig } from 'nitropack/config';
 export default defineNitroConfig({
   compatibilityDate: '2025-09-30',
 
-  // Set preset for Netlify deployment
+  // Set preset based on deployment platform
   // eslint-disable-next-line node/no-process-env
-  preset: process.env.NETLIFY ? 'netlify' : undefined,
+  preset: process.env.NETLIFY ? 'netlify' : process.env.VERCEL ? 'vercel' : undefined,
 
   // Enable experimental features
   experimental: {

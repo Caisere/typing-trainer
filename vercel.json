@@ -1,24 +1,9 @@
 {
-  "buildCommand": "bun run build:all",
-  "outputDirectory": ".output/public",
-  "functions": {
-    ".output/server": {
-      "runtime": "nodejs20.x"
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/.output/server/index.mjs"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
+  "buildCommand": "npm run build:all",
+  "outputDirectory": "dist",
   "headers": [
     {
-      "source": "/api/og",
+      "source": "/api/og(.*)",
       "headers": [
         {
           "key": "Cache-Control",
