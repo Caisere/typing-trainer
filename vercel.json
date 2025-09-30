@@ -1,6 +1,17 @@
 {
-  "buildCommand": "npm run build:nitro",
-  "outputDirectory": ".output/public",
+  "buildCommand": "npm run build:all",
+  "outputDirectory": "dist",
+  "functions": {
+    "api/og.ts": {
+      "runtime": "edge"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    }
+  ],
   "headers": [
     {
       "source": "/api/og(.*)",
