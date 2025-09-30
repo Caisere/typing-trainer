@@ -1,7 +1,28 @@
 {
   "name": "typing",
   "type": "module",
+  "version": "1.0.0",
   "private": true,
+  "packageManager": "bun@1.1.34",
+  "description": "Real-time Typing Trainer",
+  "author": "Oluwasetemi Ojo",
+  "license": "MIT",
+  "homepage": "https://realtime-typing-trainer.netlify.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oluwasetemi/typing-trainer"
+  },
+  "keywords": [
+    "typing",
+    "trainer",
+    "real-time",
+    "collaboration",
+    "multiplayer",
+    "partykit"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "vite --port 3000",
     "dev:party": "partykit dev",
