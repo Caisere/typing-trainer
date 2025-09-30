@@ -4,7 +4,7 @@
 export function generateOGImageUrl(type: 'default' | 'session' | 'spectator' | 'solo', title: string, description: string, sessionId?: string): string {
   // Get the base URL - use localhost in development, production URL in production
   const baseUrl = import.meta.env.DEV
-    ? (import.meta.env.VITE_API_URL || 'http://localhost:3004') // Allow override via env var
+    ? (import.meta.env.VITE_API_URL || 'http://localhost:3001') // Allow override via env var
     : 'https://typing-trainer.vercel.app';
 
   const params = new URLSearchParams({

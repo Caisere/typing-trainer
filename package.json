@@ -41,7 +41,9 @@
     "lint": "eslint",
     "format": "prettier",
     "check": "prettier --write . && eslint --fix",
-    "deploy:party": "partykit deploy"
+    "deploy:party": "partykit deploy",
+    "postinstall": "nitro prepare",
+    "types": "nitro prepare"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.6",

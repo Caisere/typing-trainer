@@ -1,4 +1,7 @@
 import { ImageResponse } from '@vercel/og';
+// Nitro provides these types globally when using defineEventHandler
+
+/** @type {import('nitropack').EventHandler} */
 
 export default defineEventHandler(async (event) => {
   try {
@@ -45,6 +48,7 @@ export default defineEventHandler(async (event) => {
     // Create the JSX element structure
     const element = {
       type: 'div',
+      key: 'og-image',
       props: {
         style: {
           height: '100%',
