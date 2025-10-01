@@ -6,8 +6,9 @@ import Header from '../components/header';
 import { generateDefaultOGImageUrl } from '../utils/og-image';
 
 export const Route = createRootRoute({
+  ssr: true,
   head: () => ({
-    title: 'Real-time Typing Trainer',
+    title: `Real-time Typing Trainer`,
     meta: [
       {
         name: 'description',

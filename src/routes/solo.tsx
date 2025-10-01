@@ -4,6 +4,7 @@ import TypingTrainer from '../components/typing-trainer';
 import { generateSoloOGImageUrl } from '../utils/og-image';
 
 export const Route = createFileRoute('/solo')({
+  ssr: true,
   head: () => ({
     title: 'Solo Typing Practice',
     meta: [
@@ -29,7 +30,7 @@ export const Route = createFileRoute('/solo')({
       },
       {
         property: 'og:logo',
-        content: 'https://deploy-preview-3--realtime-typing-trainer.netlify.app/favicon.ico',
+        content: 'https://fav.farm/🇳🇬',
       },
       {
         name: 'twitter:card',

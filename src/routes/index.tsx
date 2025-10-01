@@ -8,6 +8,7 @@ type SearchParams = {
 };
 
 export const Route = createFileRoute('/')({
+  ssr: true,
   validateSearch: (search: Record<string, unknown>): SearchParams => {
     return {
       session: search.session as string | undefined,
@@ -18,6 +19,7 @@ export const Route = createFileRoute('/')({
     const urlParams = new URLSearchParams(location.search);
     const sessionId = urlParams.get('session');
     const role = urlParams.get('role') as 'typist' | 'spectator';
+    const sessionName = urlParams.get('sessionName');
 
     if (sessionId === 'solo') {
       throw redirect({ to: '/solo' });
@@ -26,14 +28,14 @@ export const Route = createFileRoute('/')({
     if (sessionId && role === 'typist') {
       throw redirect({
         to: '/session',
-        search: { sessionId },
+        search: { sessionId, ...(sessionName && { sessionName }) },
       });
     }
 
     if (sessionId && role === 'spectator') {
       throw redirect({
         to: '/spectator',
-        search: { sessionId },
+        search: { sessionId, ...(sessionName && { sessionName }) },
       });
     }
   },
@@ -46,6 +48,7 @@ function App() {
   const handleStartSession = (
     newSessionId: string,
     newRole: 'typist' | 'spectator',
+    sessionName?: string,
   ) => {
     if (newSessionId === 'solo') {
       navigate({ to: '/solo' });
@@ -55,13 +58,13 @@ function App() {
     if (newRole === 'typist') {
       navigate({
         to: '/session',
-        search: { sessionId: newSessionId },
+        search: { sessionId: newSessionId, ...(sessionName && { sessionName }) },
       });
     }
     else {
       navigate({
         to: '/spectator',
-        search: { sessionId: newSessionId },
+        search: { sessionId: newSessionId, ...(sessionName && { sessionName }) },
       });
     }
   };

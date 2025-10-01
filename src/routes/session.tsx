@@ -7,9 +7,11 @@ import { generateSessionOGImageUrl } from '../utils/og-image';
 type SessionSearchParams = {
   sessionId: string;
   userId?: string;
+  sessionName?: string;
 };
 
 export const Route = createFileRoute('/session')({
+  ssr: true,
   validateSearch: (search: Record<string, unknown>): SessionSearchParams => {
     const sessionId = search.sessionId as string;
     if (!sessionId) {
@@ -18,6 +20,7 @@ export const Route = createFileRoute('/session')({
     return {
       sessionId,
       userId: search.userId as string | undefined,
+      sessionName: search.sessionName as string | undefined,
     };
   },
   head: ({ match }) => ({
@@ -75,10 +78,10 @@ export const Route = createFileRoute('/session')({
 });
 
 function SessionPage() {
-  const { sessionId, userId } = Route.useSearch();
+  const { sessionId, userId, sessionName } = Route.useSearch();
   const [generatedUserId] = useState(
     () => userId || `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
   );
 
-  return <RealtimeTypingTrainer sessionId={sessionId} userId={generatedUserId} />;
+  return <RealtimeTypingTrainer sessionId={sessionId} userId={generatedUserId} sessionName={sessionName} />;
 }
