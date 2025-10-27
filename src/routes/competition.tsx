@@ -71,7 +71,7 @@ function CompetitionRoute() {
     }
   }, [competitionId, username, urlUserId, userId, navigate]);
 
-  const handleCreateCompetition = (competitionName: string) => {
+  const handleCreateCompetition = (_competitionName: string) => {
     // For now, prompt for username. In a real app, this could come from auth
     // eslint-disable-next-line no-alert
     const userUsername = prompt('Enter your username:');
