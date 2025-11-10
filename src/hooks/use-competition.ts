@@ -54,8 +54,6 @@ export function useCompetition(competitionId: string, userId: string) {
     const handleServerMessage = (message: CompetitionServerMessage) => {
       switch (message.type) {
         case 'COMPETITION_STATE':
-          console.log('[useCompetition] Received COMPETITION_STATE. Current user:', competitionState.currentUserId, 'My participant data:', message.session.participants[competitionState.currentUserId || ''],
-          );
           setCompetitionState(prev => ({
             ...prev,
             session: message.session,
@@ -63,8 +61,6 @@ export function useCompetition(competitionId: string, userId: string) {
           }));
           break;
         case 'PARTICIPANT_JOINED':
-          console.log('[useCompetition] PARTICIPANT_JOINED:', 'userId:', message.participant.userId, 'username:', message.participant.username, 'isHost:', message.participant.isHost, 'isConnected:', message.participant.isConnected, 'Full participant:', message.participant,
-          );
           setCompetitionState((prev) => {
             if (!prev.session)
               return prev;
@@ -247,11 +243,7 @@ export function useCompetition(competitionId: string, userId: string) {
 
   const sendMessage = useCallback((message: CompetitionClientMessage) => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-      console.log('[useCompetition] Sending message:', message.type, message);
       socketRef.current.send(JSON.stringify(message));
-    }
-    else {
-      console.warn('[useCompetition] Socket not open, readyState:', socketRef.current?.readyState, 'message:', message.type);
     }
   }, []);
 

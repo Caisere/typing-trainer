@@ -28,28 +28,22 @@ function CompetitionRoute() {
   // Use userId from URL if present, otherwise try sessionStorage, otherwise generate new
   // This allows per-tab userId while persisting across refreshes
   const [userId] = useState(() => {
-    console.log('[CompetitionRoute] Initializing userId. urlUserId:', urlUserId);
-
     if (urlUserId) {
       // URL has userId - use it and store in sessionStorage
-      console.log('[CompetitionRoute] Using userId from URL:', urlUserId);
       sessionStorage.setItem('typing-competition-userId', urlUserId);
       return urlUserId;
     }
 
     // Check sessionStorage for this tab's userId
     const stored = sessionStorage.getItem('typing-competition-userId');
-    console.log('[CompetitionRoute] sessionStorage userId:', stored);
 
     if (stored && competitionId) {
       // We have a stored userId for this tab - use it
-      console.log('[CompetitionRoute] Using userId from sessionStorage:', stored);
       return stored;
     }
 
     // Generate new userId
     const newId = `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    console.log('[CompetitionRoute] Generated new userId:', newId);
     sessionStorage.setItem('typing-competition-userId', newId);
     return newId;
   });
@@ -61,7 +55,6 @@ function CompetitionRoute() {
   // This ensures the userId persists across page refreshes
   useEffect(() => {
     if (competitionId && username && !urlUserId && !hasUpdatedUrl.current) {
-      console.log('[Competition] Adding userId to URL for persistence:', userId);
       hasUpdatedUrl.current = true;
       navigate({
         to: '/competition',

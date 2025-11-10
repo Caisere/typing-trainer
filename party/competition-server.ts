@@ -19,35 +19,27 @@ export default class CompetitionServer implements Party.Server {
   private disconnectTimeouts = new Map<string, NodeJS.Timeout>();
 
   async onStart() {
-    const stored = await this.room.storage.get<CompetitionSession>('session');
-    if (stored) {
-      this.session = stored;
-      console.log('[CompetitionServer] onStart - Loaded session from storage:', 'id:', stored.id, 'participants:', Object.keys(stored.participants), 'state:', stored.state,
-      );
-    }
-    else {
-      console.log('[CompetitionServer] onStart - No session in storage');
+    try {
+      const stored = await this.room.storage.get<CompetitionSession>('session');
+      if (stored) {
+        this.session = stored;
+      }
+    } catch (error) {
+      console.error('[CompetitionServer] Error loading session from storage:', error);
     }
   }
 
-  async onConnect(connection: Party.Connection) {
+  async onConnect(_connection: Party.Connection) {
     // Don't immediately send session state on connect
     // Wait for JOIN_COMPETITION message to properly handle reconnection
-    console.log('[CompetitionServer] onConnect - New connection:', connection.id);
   }
 
   async onMessage(message: string, sender: Party.Connection) {
     try {
       const msg = JSON.parse(message) as CompetitionClientMessage;
-      console.log('[CompetitionServer] ===== NEW MESSAGE =====');
-      console.log('[CompetitionServer] Message type:', msg.type);
-      console.log('[CompetitionServer] Current session exists:', !!this.session);
-      console.log('[CompetitionServer] Session participants:', this.session ? Object.keys(this.session.participants) : 'NO SESSION');
-      console.log('[CompetitionServer] Received message:', msg.type, 'from', sender.id);
 
       switch (msg.type) {
         case 'JOIN_COMPETITION':
-          console.log('[CompetitionServer] Handling JOIN_COMPETITION for:', msg.username, msg.userId);
           await this.handleJoinCompetition(msg, sender);
           break;
 
@@ -85,7 +77,6 @@ export default class CompetitionServer implements Party.Server {
     // Don't immediately mark participant as disconnected and persist it
     // This prevents temporary disconnections (like page refresh) from being persisted
     // The participant will be properly handled when they reconnect via JOIN_COMPETITION
-    console.log('[CompetitionServer] onClose - Connection closed:', connection.id);
 
     if (this.session) {
       const participant = Object.values(this.session.participants).find(
@@ -107,15 +98,12 @@ export default class CompetitionServer implements Party.Server {
         // This gives time for page refreshes to reconnect
         const timeout = setTimeout(async () => {
           if (this.session && this.session.participants[participant.userId] && !this.session.participants[participant.userId].isConnected) {
-            console.log('[CompetitionServer] Persisting disconnected state for participant:', participant.userId);
             await this.persistSession();
           }
           this.disconnectTimeouts.delete(participant.userId);
         }, 30000); // 30 seconds
 
         this.disconnectTimeouts.set(participant.userId, timeout);
-
-        console.log('[CompetitionServer] onClose - Marked participant as disconnected in memory:', participant.userId);
 
         // Broadcast the disconnection to other participants (exclude the disconnected participant)
         this.broadcast({
@@ -147,10 +135,7 @@ export default class CompetitionServer implements Party.Server {
     }
 
     // Check if this user is already a participant (e.g., after page refresh)
-    console.log('[CompetitionServer] Checking for existing participant. Current participants:', Object.keys(this.session.participants), 'Looking for userId:', msg.userId,
-    );
     const existingParticipant = this.session.participants[msg.userId];
-    console.log('[CompetitionServer] Existing participant found:', !!existingParticipant);
 
     if (existingParticipant) {
       // If the existing participant is disconnected, this is definitely a reconnection
@@ -159,7 +144,6 @@ export default class CompetitionServer implements Party.Server {
 
       if (!isReconnection) {
         // Security check: Someone is trying to use a userId that's actively connected
-        console.warn('[CompetitionServer] Attempted to join with active userId:', msg.userId);
         this.sendToConnection(sender, {
           type: 'ERROR',
           message: 'This user is already in the competition. Please use a different identity.',
@@ -167,14 +151,11 @@ export default class CompetitionServer implements Party.Server {
         return;
       }
 
-      console.log('[CompetitionServer] User reconnecting, updating connection:', msg.userId, 'isHost:', existingParticipant.isHost, 'isReady:', existingParticipant.isReady);
-
       // Clear any pending disconnect timeout since they're reconnecting
       const existingTimeout = this.disconnectTimeouts.get(msg.userId);
       if (existingTimeout) {
         clearTimeout(existingTimeout);
         this.disconnectTimeouts.delete(msg.userId);
-        console.log('[CompetitionServer] Cleared disconnect timeout for reconnecting user:', msg.userId);
       }
 
       // Update their connection ID and mark as connected (in case they reconnected)
@@ -186,12 +167,6 @@ export default class CompetitionServer implements Party.Server {
       // - stats: remains the same (WPM, progress, etc. preserved)
       // - joinedAt: remains the same (original join time)
       await this.persistSession();
-
-      console.log('[CompetitionServer] After reconnection - participant state:', 'userId:', existingParticipant.userId, 'username:', existingParticipant.username, 'isHost:', existingParticipant.isHost, 'isReady:', existingParticipant.isReady, 'isConnected:', existingParticipant.isConnected,
-      );
-
-      console.log('[CompetitionServer] Session being sent back - participant isHost:', this.session.participants[msg.userId].isHost,
-      );
 
       // Send them the current state with updated connection status
       this.sendToConnection(sender, {
@@ -482,7 +457,11 @@ export default class CompetitionServer implements Party.Server {
 
   private async persistSession() {
     if (this.session) {
-      await this.room.storage.put('session', this.session);
+      try {
+        await this.room.storage.put('session', this.session);
+      } catch (error) {
+        console.error('[CompetitionServer] Error persisting session:', error);
+      }
     }
   }
 

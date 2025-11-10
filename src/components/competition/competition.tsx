@@ -33,26 +33,13 @@ export default function Competition({
   } = useCompetition(competitionId, userId)
 
   const [showCountdown, setShowCountdown] = useState(false)
-  const [hasJoined, setHasJoined] = useState(() => {
-    // Check if we've already joined this competition in this session
-    const joinedKey = `typing-competition-joined-${competitionId}`
-    return sessionStorage.getItem(joinedKey) === 'true'
-  })
+  const [hasJoined, setHasJoined] = useState(false)
 
   // Auto-join when connected
   useEffect(() => {
     if (isConnected && !hasJoined) {
-      console.log(
-        '[Competition] Auto-joining competition:',
-        competitionId,
-        'as',
-        username,
-      )
       joinCompetition(username)
       setHasJoined(true)
-      // Mark as joined in sessionStorage to persist across refreshes
-      const joinedKey = `typing-competition-joined-${competitionId}`
-      sessionStorage.setItem(joinedKey, 'true')
     }
   }, [isConnected, hasJoined, joinCompetition, username, competitionId])
 
@@ -67,9 +54,6 @@ export default function Competition({
   }, [session?.state, showCountdown])
 
   const handleLeave = () => {
-    // Clear the joined flag when leaving
-    const joinedKey = `typing-competition-joined-${competitionId}`
-    sessionStorage.removeItem(joinedKey)
     leaveCompetition()
     onLeave()
   }
