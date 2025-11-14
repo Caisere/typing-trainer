@@ -8,13 +8,12 @@
     /* Bundler mode */
     "moduleResolution": "bundler",
     "paths": {
-      "@/*": ["./src/*"],
-      "#imports": ["./.nitro/types/nitro-imports"]
+      "@/*": ["./src/*"]
     },
 
     /* Nitro-specific optimizations */
     "resolveJsonModule": true,
-    "types": ["vite/client", "vite-plugin-pwa/client", "node", "vitest", "./.nitro/types/nitro"],
+    "types": ["vite/client", "vite-plugin-pwa/client", "node", "vitest"],
     "allowImportingTsExtensions": true,
     "strict": true,
     "noFallthroughCasesInSwitch": true,
@@ -38,9 +37,5 @@
     "nitro.config.ts",
     "api/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    ".output",
-    "dist"
-  ]
+  "exclude": ["node_modules", ".output", "dist"]
 }

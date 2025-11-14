@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
-import { useCompetition } from '../../hooks/use-competition'
-import CompetitionResults from './competition-results'
-import CompetitionTypingView from './competition-typing-view'
-import CompetitionWaitingRoom from './competition-waiting-room'
-import CountdownOverlay from './countdown-overlay'
+import { useCompetition } from '../../hooks/use-competition';
+import CompetitionResults from './competition-results';
+import CompetitionTypingView from './competition-typing-view';
+import CompetitionWaitingRoom from './competition-waiting-room';
+import CountdownOverlay from './countdown-overlay';
 
 type CompetitionProps = {
-  competitionId: string
-  userId: string
-  username: string
-  onLeave: () => void
-}
+  competitionId: string;
+  userId: string;
+  username: string;
+  onLeave: () => void;
+};
 
 export default function Competition({
   competitionId,
@@ -30,40 +30,40 @@ export default function Competition({
     sendTypingUpdate,
     finishTyping,
     leaveCompetition,
-  } = useCompetition(competitionId, userId)
+  } = useCompetition(competitionId, userId);
 
-  const [showCountdown, setShowCountdown] = useState(false)
-  const [hasJoined, setHasJoined] = useState(false)
+  const [showCountdown, setShowCountdown] = useState(false);
+  const [hasJoined, setHasJoined] = useState(false);
 
   // Auto-join when connected
   useEffect(() => {
     if (isConnected && !hasJoined) {
-      joinCompetition(username)
-      setHasJoined(true)
+      joinCompetition(username);
+      setHasJoined(true);
     }
-  }, [isConnected, hasJoined, joinCompetition, username, competitionId])
+  }, [isConnected, hasJoined, joinCompetition, username, competitionId]);
 
   // Handle countdown state
   useEffect(() => {
     if (session?.state === 'countdown' && !showCountdown) {
-      setShowCountdown(true)
+      setShowCountdown(true);
     }
     if (session?.state === 'active' && showCountdown) {
-      setShowCountdown(false)
+      setShowCountdown(false);
     }
-  }, [session?.state, showCountdown])
+  }, [session?.state, showCountdown]);
 
   const handleLeave = () => {
-    leaveCompetition()
-    onLeave()
-  }
+    leaveCompetition();
+    onLeave();
+  };
 
   const handleRaceAgain = () => {
     // TODO:
     // For now, just go back to session manager
     // In the future, could implement a "rematch" feature
-    handleLeave()
-  }
+    handleLeave();
+  };
 
   // Loading state
   if (!isConnected || !session) {
@@ -76,7 +76,7 @@ export default function Competition({
           </p>
         </div>
       </div>
-    )
+    );
   }
 
   // Error state
@@ -98,7 +98,7 @@ export default function Competition({
           </button>
         </div>
       </div>
-    )
+    );
   }
 
   // Render based on competition state
@@ -139,5 +139,5 @@ export default function Competition({
         />
       )}
     </>
-  )
+  );
 }

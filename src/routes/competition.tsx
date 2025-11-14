@@ -1,8 +1,10 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
 
+import { Notification } from '../components/common';
 import Competition from '../components/competition/competition';
 import CompetitionSessionManager from '../components/competition/competition-session-manager';
+import { useNotification } from '../hooks/use-notification';
 
 type SearchParams = {
   competitionId?: string;
@@ -24,6 +26,7 @@ export const Route = createFileRoute('/competition')({
 function CompetitionRoute() {
   const navigate = useNavigate();
   const { competitionId, username, userId: urlUserId } = Route.useSearch();
+  const { notification, hideNotification, showSuccess } = useNotification();
 
   // Use userId from URL if present, otherwise try sessionStorage, otherwise generate new
   // This allows per-tab userId while persisting across refreshes
@@ -64,13 +67,15 @@ function CompetitionRoute() {
     }
   }, [competitionId, username, urlUserId, userId, navigate]);
 
-  const handleCreateCompetition = (_competitionName: string) => {
-    // For now, prompt for username. In a real app, this could come from auth
-    // eslint-disable-next-line no-alert
-    const userUsername = prompt('Enter your username:');
-    if (!userUsername)
-      return;
+  const copyClipboard = (code: string) => {
+    navigator.clipboard.writeText(code).then(() => {
+      showSuccess('Competition code copied!', `Code ${code} has been copied to clipboard. Share it with friends!`);
+    }).catch(() => {
+      // Silently fail if clipboard access is denied
+    });
+  };
 
+  const handleCreateCompetition = (_competitionName: string, userUsername: string) => {
     // Generate a unique competition code that will also be the room ID
     // Format: RACE-XXXX where XXXX is random alphanumeric
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -78,6 +83,9 @@ function CompetitionRoute() {
     for (let i = 0; i < 4; i++) {
       code += chars.charAt(Math.floor(Math.random() * chars.length));
     }
+
+    // Auto-copy the competition code to clipboard
+    copyClipboard(code);
 
     // Use the existing userId from state, don't generate a new one
     // This ensures the same user maintains their identity across navigation
@@ -116,20 +124,38 @@ function CompetitionRoute() {
   // Show session manager if no competition ID
   if (!competitionId || !username) {
     return (
-      <CompetitionSessionManager
-        onCreateCompetition={handleCreateCompetition}
-        onJoinCompetition={handleJoinCompetition}
-      />
+      <>
+        <CompetitionSessionManager
+          onCreateCompetition={handleCreateCompetition}
+          onJoinCompetition={handleJoinCompetition}
+        />
+        <Notification
+          show={notification.show}
+          title={notification.title}
+          message={notification.message}
+          type={notification.type}
+          onClose={hideNotification}
+        />
+      </>
     );
   }
 
   // Show competition view
   return (
-    <Competition
-      competitionId={competitionId}
-      userId={userId}
-      username={username}
-      onLeave={handleLeave}
-    />
+    <>
+      <Competition
+        competitionId={competitionId}
+        userId={userId}
+        username={username}
+        onLeave={handleLeave}
+      />
+      <Notification
+        show={notification.show}
+        title={notification.title}
+        message={notification.message}
+        type={notification.type}
+        onClose={hideNotification}
+      />
+    </>
   );
 }

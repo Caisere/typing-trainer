@@ -1,7 +1,7 @@
 import type { LeaderboardEntry } from '../../types/competition.types';
 
-import { formatTime } from '../../utils/metrics';
 import { Icons } from '../../utils/icons';
+import { formatTime } from '../../utils/metrics';
 
 type LiveLeaderboardProps = {
   leaderboard: LeaderboardEntry[];

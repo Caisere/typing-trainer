@@ -49,7 +49,11 @@ export default function ErrorFeedback() {
         </div>
         <div className="flex-1">
           <h3 className="text-sm font-semibold text-red-800 mb-2">
-            {errorDetails.length} {errorDetails.length === 1 ? 'Error' : 'Errors'} Detected
+            {errorDetails.length}
+            {' '}
+            {errorDetails.length === 1 ? 'Error' : 'Errors'}
+            {' '}
+            Detected
           </h3>
           <div className="space-y-2">
             {errorDetails.map(({ wordIndex, expectedWord, typedWord }) => (
@@ -58,7 +62,11 @@ export default function ErrorFeedback() {
                 className="text-sm bg-white rounded px-3 py-2 border border-red-100"
               >
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-gray-600 font-medium">Word {wordIndex + 1}:</span>
+                  <span className="text-gray-600 font-medium">
+                    Word
+                    {wordIndex + 1}
+                    :
+                  </span>
                   <span className="line-through text-red-600 font-mono bg-red-100 px-2 py-0.5 rounded">
                     {typedWord}
                   </span>

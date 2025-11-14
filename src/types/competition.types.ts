@@ -7,7 +7,7 @@ export type ParticipantStats = {
   currentIndex: number;
   errors: number;
   finished: boolean;
-  finishTime?: number; // timestamp when finished
+  finishTime?: number; // duration in milliseconds from competition start
 };
 
 export type Participant = {
@@ -49,16 +49,16 @@ export type LeaderboardEntry = {
   accuracy: number;
   progress: number;
   finished: boolean;
-  finishTime?: number;
+  finishTime?: number; // duration in milliseconds from competition start
   isYou: boolean;
 };
 
 // Client → Server messages
-export type CompetitionClientMessage =
-  | { type: 'JOIN_COMPETITION'; username: string; userId: string }
-  | { type: 'READY_UP'; isReady: boolean }
-  | { type: 'START_COMPETITION' }
-  | {
+export type CompetitionClientMessage
+  = | { type: 'JOIN_COMPETITION'; username: string; userId: string }
+    | { type: 'READY_UP'; isReady: boolean }
+    | { type: 'START_COMPETITION' }
+    | {
       type: 'TYPING_UPDATE';
       currentIndex: number;
       errors: number;
@@ -66,22 +66,22 @@ export type CompetitionClientMessage =
       accuracy: number;
       progress: number;
     }
-  | { type: 'FINISH_TYPING'; finalStats: ParticipantStats }
-  | { type: 'LEAVE_COMPETITION' };
+    | { type: 'FINISH_TYPING'; finalStats: ParticipantStats }
+    | { type: 'LEAVE_COMPETITION' };
 
 // Server → Client messages
-export type CompetitionServerMessage =
-  | { type: 'COMPETITION_STATE'; session: CompetitionSession }
-  | { type: 'PARTICIPANT_JOINED'; participant: Participant }
-  | { type: 'PARTICIPANT_LEFT'; userId: string }
-  | { type: 'PARTICIPANT_READY'; userId: string; isReady: boolean }
-  | { type: 'COUNTDOWN_START'; countdownStartTime: number }
-  | { type: 'COMPETITION_START'; startTime: number }
-  | { type: 'LEADERBOARD_UPDATE'; leaderboard: LeaderboardEntry[] }
-  | { type: 'PARTICIPANT_UPDATE'; userId: string; stats: ParticipantStats }
-  | { type: 'COMPETITION_END'; finalLeaderboard: LeaderboardEntry[] }
-  | { type: 'ERROR'; message: string };
+export type CompetitionServerMessage
+  = | { type: 'COMPETITION_STATE'; session: CompetitionSession }
+    | { type: 'PARTICIPANT_JOINED'; participant: Participant }
+    | { type: 'PARTICIPANT_LEFT'; userId: string }
+    | { type: 'PARTICIPANT_READY'; userId: string; isReady: boolean }
+    | { type: 'COUNTDOWN_START'; countdownStartTime: number }
+    | { type: 'COMPETITION_START'; startTime: number }
+    | { type: 'LEADERBOARD_UPDATE'; leaderboard: LeaderboardEntry[] }
+    | { type: 'PARTICIPANT_UPDATE'; userId: string; stats: ParticipantStats }
+    | { type: 'COMPETITION_END'; finalLeaderboard: LeaderboardEntry[] }
+    | { type: 'ERROR'; message: string };
 
-export type CompetitionMessage =
-  | CompetitionClientMessage
-  | CompetitionServerMessage;
+export type CompetitionMessage
+  = | CompetitionClientMessage
+    | CompetitionServerMessage;

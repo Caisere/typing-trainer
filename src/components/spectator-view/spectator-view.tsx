@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef } from 'react';
 
 import { useRealtimeTyping } from '../../hooks/use-realtime-typing';
-import { calcAccuracy, calcWPM, formatTime } from '../../utils/metrics';
 import { Icons } from '../../utils/icons';
+import { calcAccuracy, calcWPM, formatTime } from '../../utils/metrics';
 import { StatCard } from '../stats-panel';
 
 type SpectatorViewProps = {
@@ -94,19 +94,19 @@ export default function SpectatorView({
     return words.map((word, wordIndex) => {
       const wordSpans = word.split('').map((char, charPos) => {
         const globalIndex = charIndex + charPos;
-        let className = 'text-lg font-mono ';
+        let className = 'text-xl font-mono ';
 
         if (globalIndex === realtimeState.currentIndex) {
           // Current character being typed
-          className += 'bg-blue-300 text-white animate-pulse';
+          className += 'bg-blue-500 text-white animate-pulse';
         }
         else if (globalIndex < realtimeState.currentIndex) {
           // Already typed character
           if (realtimeState.errors.has(globalIndex)) {
-            className += 'bg-red-200 text-red-800'; // Incorrect
+            className += 'bg-red-300 text-red-900'; // Incorrect
           }
           else {
-            className += 'bg-green-100 text-green-800'; // Correct
+            className += 'bg-green-200 text-green-900'; // Correct
           }
         }
         else {
@@ -128,9 +128,11 @@ export default function SpectatorView({
       charIndex = charIndex + word.length + 1; // +1 for the space
 
       return (
-        <span key={wordIndex} className="whitespace-nowrap">
+        <span key={crypto.randomUUID()} className="whitespace-nowrap">
           {wordSpans}
-          {wordIndex < words.length - 1 && <span className="text-lg font-mono"> </span>}
+          {wordIndex < words.length - 1 && (
+            <span className="text-xl font-mono"> </span>
+          )}
         </span>
       );
     });
@@ -172,23 +174,112 @@ export default function SpectatorView({
   if (!realtimeState.sourceText) {
     return (
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-600 mb-4 flex items-center justify-center gap-2">
-            <Icons.Eye size={28} />
-            Spectator Mode
-          </h1>
-          <p className="text-gray-600 mb-4">
-            Waiting for the typing session to begin...
-          </p>
-          <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
-            <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-            <span>
-              Connected •
-              {realtimeState.spectatorCount}
-              {' '}
-              viewers
-            </span>
+        {/* Header */}
+        <div className="border-b border-gray-200 px-4 py-5 sm:px-6 dark:border-white/10 -mx-6 -mt-6 mb-6">
+          <div className="-mt-4 -ml-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
+            <div className="mt-4 ml-4">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <Icons.Eye size={24} />
+                {realtimeState.sessionName || 'Spectator Mode'}
+              </h3>
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                Waiting for the typing session to begin
+              </p>
+            </div>
+            <div className="mt-4 ml-4 shrink-0">
+              <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-green-50 border border-green-200">
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span className="text-sm font-semibold text-green-700">Connected</span>
+              </div>
+            </div>
           </div>
+        </div>
+
+        {/* Activity Timeline */}
+        <div className="bg-blue-50 rounded-lg border border-blue-200 p-6 pb-12">
+          <h3 className="text-sm font-semibold text-blue-800 mb-4">Session Activity</h3>
+          <div className="flow-root">
+            <ul className="-mb-8">
+              {/* Connection Event */}
+              <li>
+                <div className="relative pb-8">
+                  <span className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-blue-200" aria-hidden="true" />
+                  <div className="relative flex space-x-3">
+                    <div>
+                      <span className="flex size-8 items-center justify-center rounded-full bg-green-100 ring-8 ring-white">
+                        <Icons.Check className="size-5 text-green-600" aria-hidden="true" />
+                      </span>
+                    </div>
+                    <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+                      <div>
+                        <p className="text-sm text-gray-900">
+                          Connected to session
+                        </p>
+                      </div>
+                      <div className="whitespace-nowrap text-right text-sm text-gray-500">
+                        <time>Just now</time>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              {/* Viewer Count Event */}
+              <li>
+                <div className="relative pb-8">
+                  <span className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-blue-200" aria-hidden="true" />
+                  <div className="relative flex space-x-3">
+                    <div>
+                      <span className="flex size-8 items-center justify-center rounded-full bg-blue-100 ring-8 ring-white">
+                        <Icons.Person className="size-5 text-blue-600" aria-hidden="true" />
+                      </span>
+                    </div>
+                    <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+                      <div>
+                        <p className="text-sm text-gray-900">
+                          {realtimeState.spectatorCount}
+                          {' '}
+                          {realtimeState.spectatorCount === 1 ? 'viewer' : 'viewers'}
+                          {' '}
+                          watching
+                        </p>
+                      </div>
+                      <div className="whitespace-nowrap text-right text-sm text-gray-500">
+                        <time>Now</time>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              {/* Waiting Status */}
+              <li>
+                <div className="relative pb-0">
+                  <div className="relative flex space-x-3">
+                    <div>
+                      <span className="flex size-8 items-center justify-center rounded-full bg-gray-100 ring-8 ring-white">
+                        <Icons.Timer className="size-5 text-gray-600 animate-pulse" aria-hidden="true" />
+                      </span>
+                    </div>
+                    <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+                      <div>
+                        <p className="text-sm text-gray-900">
+                          Waiting for typist to start...
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Info Box */}
+        <div className="mt-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
+          <p className="text-sm text-gray-600 text-center">
+            The session will begin when the typist starts typing. You'll see their progress in real-time!
+          </p>
         </div>
       </div>
     );

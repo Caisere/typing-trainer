@@ -72,7 +72,8 @@ function typingReducer(state: TypingState, action: TypingAction): TypingState {
           newTypedWords.push(''); // Start new empty word
         }
         // If current word is empty, just ignore the space (don't add it)
-      } else {
+      }
+      else {
         // Add character to current word
         newTypedWords[currentTypedWordIndex] += action.char;
       }
@@ -101,7 +102,8 @@ function typingReducer(state: TypingState, action: TypingAction): TypingState {
           // Compare the completed word with the expected word
           if (completedTypedWord !== expectedWord) {
             newErrors.add(wordIndexToValidate); // Store word index as error
-          } else {
+          }
+          else {
             // Remove error if word was corrected
             newErrors.delete(wordIndexToValidate);
           }
@@ -141,7 +143,8 @@ function typingReducer(state: TypingState, action: TypingAction): TypingState {
         }
         // If the last word is not empty, we typed multiple spaces and ignored them,
         // so don't pop anything
-      } else {
+      }
+      else {
         // Remove last character from current word
         // Safety check: ensure the word exists and is a string
         if (newTypedWords[currentTypedWordIndex] && typeof newTypedWords[currentTypedWordIndex] === 'string') {

@@ -64,7 +64,7 @@ export default function TextDisplay() {
       const wordEndIndex = charIndex + word.length;
 
       // Determine word status
-      let wordClassName = 'text-lg font-mono inline-block mr-[0.5ch] px-1 rounded transition-colors ';
+      let wordClassName = 'text-xl font-mono inline-block mr-[0.5ch] px-1 rounded transition-colors ';
 
       // Check if this word has been typed (not empty)
       const wordTyped = typedWords[wordIndex] && typedWords[wordIndex].length > 0;
@@ -74,15 +74,18 @@ export default function TextDisplay() {
         // Word has been completed AND typed
         if (errors.has(wordIndex)) {
           // Entire word is incorrect
-          wordClassName += 'bg-red-200 text-red-800';
-        } else {
-          // Entire word is correct
-          wordClassName += 'bg-green-100 text-green-800';
+          wordClassName += 'bg-red-300 text-red-900';
         }
-      } else if (wordIndex === currentWordIndex && !finished) {
+        else {
+          // Entire word is correct
+          wordClassName += 'bg-green-200 text-green-900';
+        }
+      }
+      else if (wordIndex === currentWordIndex && !finished) {
         // Currently typing this word - show it in gray/neutral color
-        wordClassName += 'bg-blue-50 text-gray-800';
-      } else {
+        wordClassName += 'bg-blue-100 text-gray-900';
+      }
+      else {
         // Not yet typed
         wordClassName += 'text-gray-600';
       }
@@ -94,7 +97,7 @@ export default function TextDisplay() {
 
         // Highlight current character with cursor
         if (globalIndex === currentIndex) {
-          charClassName = 'border-b-2 border-blue-500 animate-pulse';
+          charClassName = 'border-b-4 border-blue-600 animate-pulse';
         }
 
         return (
@@ -114,7 +117,7 @@ export default function TextDisplay() {
 
       return (
         <span
-          key={wordIndex}
+          key={crypto.randomUUID()}
           className={wordClassName}
           aria-label={wordIndex === currentWordIndex ? `Currently typing: ${word}` : undefined}
         >

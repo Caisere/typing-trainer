@@ -1,7 +1,7 @@
 import type { LeaderboardEntry } from '../../types/competition.types';
 
-import { formatTime } from '../../utils/metrics';
 import { Icons } from '../../utils/icons';
+import { formatTime } from '../../utils/metrics';
 
 type CompetitionResultsProps = {
   leaderboard: LeaderboardEntry[];
@@ -49,23 +49,37 @@ export default function CompetitionResults({
           </div>
         </div>
 
-        {/* Your Result */}
+        {/* Your Result - Enhanced Stats */}
         {yourEntry && (
-          <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-6 mb-6">
-            <h3 className="text-lg font-bold text-blue-800 mb-3">
-              Your Result
+          <div className="mb-6">
+            <h3 className="text-lg font-bold text-gray-800 mb-4 text-center">
+              Your Performance
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <StatCard label="Rank" value={`#${yourEntry.rank}`} />
-              <StatCard label="WPM" value={yourEntry.wpm.toString()} />
-              <StatCard
-                label="Accuracy"
-                value={`${yourEntry.accuracy}%`}
-              />
-              <StatCard
-                label="Time"
-                value={formatTime(yourEntry.finishTime || 0)}
-              />
+            <div className="bg-white">
+              <div className="mx-auto max-w-7xl">
+                <div className="grid grid-cols-2 gap-px bg-gray-900/5 sm:grid-cols-2 lg:grid-cols-4 rounded-lg overflow-hidden border border-gray-200">
+                  <EnhancedStatCard
+                    name="Final Rank"
+                    value={`#${yourEntry.rank}`}
+                    isHighlighted={yourEntry.rank <= 3}
+                  />
+                  <EnhancedStatCard
+                    name="Words Per Minute"
+                    value={yourEntry.wpm.toString()}
+                    unit="WPM"
+                  />
+                  <EnhancedStatCard
+                    name="Accuracy"
+                    value={yourEntry.accuracy.toString()}
+                    unit="%"
+                    isHighlighted={yourEntry.accuracy >= 95}
+                  />
+                  <EnhancedStatCard
+                    name="Completion Time"
+                    value={formatTime(yourEntry.finishTime || 0)}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -102,6 +116,38 @@ export default function CompetitionResults({
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function EnhancedStatCard({
+  name,
+  value,
+  unit,
+  isHighlighted = false,
+}: {
+  name: string;
+  value: string;
+  unit?: string;
+  isHighlighted?: boolean;
+}) {
+  return (
+    <div className={`bg-white px-4 py-6 sm:px-6 lg:px-8 ${isHighlighted ? 'bg-gradient-to-br from-purple-50 to-blue-50' : ''}`}>
+      <p className={`text-sm/6 font-medium ${isHighlighted ? 'text-purple-700' : 'text-gray-500'}`}>
+        {name}
+      </p>
+      <p className="mt-2 flex items-baseline gap-x-2">
+        <span className={`text-4xl font-semibold tracking-tight ${isHighlighted ? 'text-purple-900' : 'text-gray-900'}`}>
+          {value}
+        </span>
+        {unit
+          ? (
+              <span className={`text-sm ${isHighlighted ? 'text-purple-600' : 'text-gray-500'}`}>
+                {unit}
+              </span>
+            )
+          : null}
+      </p>
     </div>
   );
 }
@@ -160,15 +206,6 @@ function PodiumCard({
         #
         {position}
       </div>
-    </div>
-  );
-}
-
-function StatCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="text-center">
-      <p className="text-sm text-gray-600 mb-1">{label}</p>
-      <p className="text-2xl font-bold text-blue-700">{value}</p>
     </div>
   );
 }

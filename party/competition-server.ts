@@ -337,10 +337,15 @@ export default class CompetitionServer implements Party.Server {
     if (!participant)
       return;
 
+    // Calculate finish time as duration from start in milliseconds
+    const finishDuration = this.session.startTime
+      ? Date.now() - this.session.startTime
+      : 0;
+
     participant.stats = {
       ...msg.finalStats,
       finished: true,
-      finishTime: Date.now(),
+      finishTime: finishDuration,
     };
 
     await this.persistSession();

@@ -1,3 +1,5 @@
+import { Buffer } from 'node:buffer';
+
 export async function handler(event: any) {
   try {
     const query = new URLSearchParams(event.queryStringParameters || {});

@@ -35,7 +35,7 @@
         width: 80px;
         height: 80px;
         margin: 0 auto 24px;
-        background: #FEF3C7;
+        background: #fef3c7;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -45,25 +45,25 @@
       .icon svg {
         width: 40px;
         height: 40px;
-        color: #F59E0B;
+        color: #f59e0b;
       }
 
       h1 {
         font-size: 28px;
-        color: #1F2937;
+        color: #1f2937;
         margin-bottom: 12px;
         font-weight: 700;
       }
 
       p {
-        color: #6B7280;
+        color: #6b7280;
         line-height: 1.6;
         margin-bottom: 16px;
         font-size: 16px;
       }
 
       .features {
-        background: #F9FAFB;
+        background: #f9fafb;
         border-radius: 12px;
         padding: 20px;
         margin: 24px 0;
@@ -84,13 +84,13 @@
       .feature svg {
         width: 20px;
         height: 20px;
-        color: #10B981;
+        color: #10b981;
         flex-shrink: 0;
         margin-top: 2px;
       }
 
       .feature-offline svg {
-        color: #EF4444;
+        color: #ef4444;
       }
 
       .feature-text {
@@ -100,7 +100,7 @@
 
       .button {
         display: inline-block;
-        background: #8B5CF6;
+        background: #8b5cf6;
         color: white;
         padding: 12px 24px;
         border-radius: 8px;
@@ -113,15 +113,15 @@
       }
 
       .button:hover {
-        background: #7C3AED;
+        background: #7c3aed;
       }
 
       .retry-info {
         margin-top: 20px;
         padding-top: 20px;
-        border-top: 1px solid #E5E7EB;
+        border-top: 1px solid #e5e7eb;
         font-size: 14px;
-        color: #9CA3AF;
+        color: #9ca3af;
       }
     </style>
   </head>
@@ -139,55 +139,41 @@
       </div>
 
       <h1>You're Offline</h1>
-      <p>
-        It looks like you've lost your internet connection. Don't worry, some features still work!
-      </p>
+      <p>It looks like you've lost your internet connection. Don't worry, some features still work!</p>
 
       <div class="features">
         <div class="feature">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
           </svg>
-          <div class="feature-text">
-            <strong>Solo Practice</strong> - Practice typing with cached texts
-          </div>
+          <div class="feature-text"><strong>Solo Practice</strong> - Practice typing with cached texts</div>
         </div>
 
         <div class="feature feature-offline">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
-          <div class="feature-text">
-            <strong>Competition Mode</strong> - Requires internet connection
-          </div>
+          <div class="feature-text"><strong>Competition Mode</strong> - Requires internet connection</div>
         </div>
 
         <div class="feature feature-offline">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
-          <div class="feature-text">
-            <strong>Spectator Mode</strong> - Requires internet connection
-          </div>
+          <div class="feature-text"><strong>Spectator Mode</strong> - Requires internet connection</div>
         </div>
 
         <div class="feature feature-offline">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
-          <div class="feature-text">
-            <strong>Real-time Sessions</strong> - Requires internet connection
-          </div>
+          <div class="feature-text"><strong>Real-time Sessions</strong> - Requires internet connection</div>
         </div>
       </div>
 
-      <button class="button" onclick="window.location.href='/solo'">
-        Go to Solo Practice
-      </button>
+      <button class="button" onclick="window.location.href='/solo'">Go to Solo Practice</button>
 
-      <div class="retry-info">
-        The page will automatically reload when your connection is restored
-      </div>
+      <div class="retry-info">The page will automatically reload when your connection is restored</div>
     </div>
 
     <script>

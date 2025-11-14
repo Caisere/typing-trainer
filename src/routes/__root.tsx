@@ -2,9 +2,9 @@ import { TanstackDevtools } from '@tanstack/react-devtools';
 import { createRootRoute, HeadContent, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 
+import Navbar from '../components/common/navbar';
 import OfflineIndicator from '../components/common/offline-indicator';
 import UpdatePrompt from '../components/common/update-prompt';
-import Header from '../components/header';
 import { generateDefaultOGImageUrl } from '../utils/og-image';
 
 export const Route = createRootRoute({
@@ -82,7 +82,7 @@ export const Route = createRootRoute({
     <div className="min-h-screen bg-gray-50">
       <HeadContent />
       <OfflineIndicator />
-      <Header />
+      <Navbar />
       <main className="flex items-center justify-center p-4">
         <Outlet />
       </main>

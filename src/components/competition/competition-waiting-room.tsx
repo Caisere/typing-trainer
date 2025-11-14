@@ -1,15 +1,22 @@
+import type { IconType } from 'react-icons';
+
+import { useNotification } from '@/hooks/use-notification';
+
 import type {
   CompetitionSession,
   Participant,
-} from '../../types/competition.types'
+} from '../../types/competition.types';
+
+import { Icons } from '../../utils/icons';
+import { Notification } from '../common';
 
 type CompetitionWaitingRoomProps = {
-  session: CompetitionSession
-  currentUserId: string
-  onReady: (isReady: boolean) => void
-  onStart: () => void
-  onLeave: () => void
-}
+  session: CompetitionSession;
+  currentUserId: string;
+  onReady: (isReady: boolean) => void;
+  onStart: () => void;
+  onLeave: () => void;
+};
 
 export default function CompetitionWaitingRoom({
   session,
@@ -18,18 +25,19 @@ export default function CompetitionWaitingRoom({
   onStart,
   onLeave,
 }: CompetitionWaitingRoomProps) {
-  const participants = Object.values(session.participants)
-  const currentParticipant = session.participants[currentUserId]
-  const isHost = currentParticipant?.isHost || false
-  const readyCount = participants.filter((p) => p.isReady).length
-  const totalCount = participants.length
-  const canStart = totalCount >= session.settings.minParticipants
+  const { notification, showSuccess, hideNotification } = useNotification();
+  const participants = Object.values(session.participants);
+  const currentParticipant = session.participants[currentUserId];
+  const isHost = currentParticipant?.isHost || false;
+  const readyCount = participants.filter(p => p.isReady).length;
+  const totalCount = participants.length;
+  const canStart = totalCount >= session.settings.minParticipants;
 
   const copyCompetitionCode = () => {
     navigator.clipboard.writeText(session.code).then(() => {
-      // Could add a toast notification here
-    })
-  }
+      showSuccess('Competition code copied!', `Code ${session.code} has been copied to clipboard. Share it with friends!`);
+    });
+  };
 
   return (
     <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
@@ -64,7 +72,9 @@ export default function CompetitionWaitingRoom({
           <div>
             <p className="text-sm font-semibold text-blue-800">
               Ready:
-              {readyCount}/{totalCount}
+              {readyCount}
+              /
+              {totalCount}
             </p>
             <p className="text-xs text-blue-600">
               {canStart
@@ -75,34 +85,32 @@ export default function CompetitionWaitingRoom({
           {currentParticipant && (
             <button
               type="button"
-              title="Click me to show you are ready"
               onClick={() => onReady(!currentParticipant.isReady)}
               className={`px-4 py-2 rounded-lg font-medium transition-all ${
                 currentParticipant.isReady
                   ? 'bg-green-500 text-white hover:bg-green-600'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200 border-2 border-yellow-400'
               }`}
             >
-              {currentParticipant.isReady ? '✓ Ready' : 'Not Ready'}
+              {currentParticipant.isReady ? '✓ Ready' : '👆 Click to Get Ready'}
             </button>
           )}
         </div>
       </div>
 
-      {/* Participants List */}
+      {/* Activity Timeline */}
       <div className="mb-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-3">
-          Participants ({totalCount}/{session.settings.maxParticipants})
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">
+          Activity Timeline (
+          {totalCount}
+          /
+          {session.settings.maxParticipants}
+          )
         </h2>
-        <div className="space-y-2">
-          {participants.map((participant) => (
-            <ParticipantCard
-              key={participant.userId}
-              participant={participant}
-              isYou={participant.userId === currentUserId}
-            />
-          ))}
-        </div>
+        <ParticipantsTimeline
+          participants={participants}
+          currentUserId={currentUserId}
+        />
       </div>
 
       {/* Action Buttons */}
@@ -132,62 +140,164 @@ export default function CompetitionWaitingRoom({
           Waiting for host to start the competition...
         </p>
       )}
+      <Notification
+        show={notification.show}
+        title={notification.title}
+        message={notification.message}
+        type={notification.type}
+        onClose={hideNotification}
+      />
     </div>
-  )
+  );
 }
 
-function ParticipantCard({
-  participant,
-  isYou,
-}: {
-  participant: Participant
-  isYou: boolean
-}) {
-  return (
-    <div
-      className={`flex items-center justify-between p-3 rounded-lg border ${
-        isYou ? 'bg-blue-50 border-blue-300' : 'bg-gray-50 border-gray-200'
-      }`}
-    >
-      <div className="flex items-center gap-3">
-        <div
-          className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-white ${
-            isYou ? 'bg-blue-500' : 'bg-gray-400'
-          }`}
-        >
-          {participant.username.charAt(0).toUpperCase()}
-        </div>
-        <div>
-          <p className="font-medium text-gray-800">
-            {participant.username}
-            {isYou && (
-              <span className="ml-2 text-xs text-blue-600 font-semibold">
-                (You)
-              </span>
-            )}
-            {participant.isHost && (
-              <span className="ml-2 text-xs text-purple-600 font-semibold">
-                👑 Host
-              </span>
-            )}
-          </p>
-          <p className="text-xs text-gray-500">
-            {participant.isConnected ? 'Connected' : 'Disconnected'}
-          </p>
-        </div>
-      </div>
+type TimelineEvent = {
+  id: string;
+  type: 'joined' | 'ready' | 'host';
+  participant: Participant;
+  icon: IconType;
+  iconBackground: string;
+};
 
-      <div>
-        {participant.isReady ? (
-          <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
-            ✓ Ready
-          </span>
-        ) : (
-          <span className="px-3 py-1 bg-gray-200 text-gray-600 text-xs font-semibold rounded-full">
-            Not Ready
-          </span>
-        )}
-      </div>
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ');
+}
+
+function ParticipantsTimeline({
+  participants,
+  currentUserId,
+}: {
+  participants: Participant[];
+  currentUserId: string;
+}) {
+  // Sort participants by join time (oldest first)
+  const sortedParticipants = [...participants].sort(
+    (a, b) => a.joinedAt - b.joinedAt,
+  );
+
+  // Create timeline events
+  const timelineEvents: TimelineEvent[] = sortedParticipants.flatMap(
+    (participant) => {
+      const events: TimelineEvent[] = [
+        {
+          id: `${participant.userId}-joined`,
+          type: 'joined',
+          participant,
+          icon: participant.isHost ? Icons.PersonAdd : Icons.Person,
+          iconBackground: participant.isHost ? 'bg-purple-500' : 'bg-gray-400',
+        },
+      ];
+
+      if (participant.isReady) {
+        events.push({
+          id: `${participant.userId}-ready`,
+          type: 'ready',
+          participant,
+          icon: Icons.ThumbUp,
+          iconBackground: 'bg-green-500',
+        });
+      }
+
+      return events;
+    },
+  );
+
+  return (
+    <div className="flow-root">
+      <ul role="list" className="-mb-8">
+        {timelineEvents.map((event, eventIdx) => (
+          <li key={event.id}>
+            <div className="relative pb-8">
+              {eventIdx !== timelineEvents.length - 1
+                ? (
+                    <span
+                      aria-hidden="true"
+                      className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
+                    />
+                  )
+                : null}
+              <div className="relative flex space-x-3">
+                <div>
+                  <span
+                    className={classNames(
+                      event.iconBackground,
+                      'flex size-8 items-center justify-center rounded-full ring-8 ring-white',
+                    )}
+                  >
+                    <event.icon
+                      aria-hidden="true"
+                      className="size-5 text-white"
+                    />
+                  </span>
+                </div>
+                <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+                  <div>
+                    <p className="text-sm text-gray-500">
+                      {event.type === 'joined' && (
+                        <>
+                          <span className="font-medium text-gray-900">
+                            {event.participant.username}
+                          </span>
+                          {' '}
+                          {event.participant.isHost
+                            ? 'created the competition'
+                            : 'joined the competition'}
+                          {event.participant.userId === currentUserId && (
+                            <span className="ml-1 text-xs text-blue-600 font-semibold">
+                              (You)
+                            </span>
+                          )}
+                        </>
+                      )}
+                      {event.type === 'ready' && (
+                        <>
+                          <span className="font-medium text-gray-900">
+                            {event.participant.username}
+                          </span>
+                          {' '}
+                          is ready to race
+                          {event.participant.userId === currentUserId && (
+                            <span className="ml-1 text-xs text-blue-600 font-semibold">
+                              (You)
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </p>
+                  </div>
+                  <div className="text-right text-sm whitespace-nowrap text-gray-500">
+                    <time
+                      dateTime={new Date(
+                        event.participant.joinedAt,
+                      ).toISOString()}
+                    >
+                      {formatRelativeTime(event.participant.joinedAt)}
+                    </time>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
-  )
+  );
+}
+
+function formatRelativeTime(timestamp: number): string {
+  const now = Date.now();
+  const diff = now - timestamp;
+  const seconds = Math.floor(diff / 1000);
+
+  if (seconds < 10)
+    return 'Just now';
+  if (seconds < 60)
+    return `${seconds}s ago`;
+
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60)
+    return `${minutes}m ago`;
+
+  const hours = Math.floor(minutes / 60);
+  return `${hours}h ago`;
 }

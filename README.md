@@ -96,47 +96,6 @@ The Real-time Typing Trainer is a web application that combines traditional typi
 - **TypeScript Compiler**: Type checking and compilation
 - **PartyKit Deploy**: Serverless deployment platform
 
-## Project Structure
-
-```
-typing/
-├── party/                          # PartyKit server implementation
-│   └── typing-server.ts           # Real-time server logic
-├── src/
-│   ├── components/                # React components
-│   │   ├── common/               # Shared components
-│   │   ├── progress-bar/         # Progress visualization
-│   │   ├── realtime-typing-trainer/ # Main typing interface
-│   │   ├── session-manager/      # Session creation/joining
-│   │   ├── spectator-view/       # Spectator interface
-│   │   ├── stats-panel/          # Statistics display
-│   │   ├── text-display/         # Text rendering
-│   │   └── typing-input/         # Input handling
-│   ├── context/                  # React Context providers
-│   │   └── typing-context.tsx    # Typing state management
-│   ├── hooks/                    # Custom React hooks
-│   │   ├── use-realtime-typing.ts # Real-time functionality
-│   │   ├── use-typing-session.ts # Session management
-│   │   ├── use-typing-stats.ts   # Statistics calculation
-│   │   └── use-typing.ts         # Core typing logic
-│   ├── routes/                   # Application routes
-│   │   ├── __root.tsx           # Root route component
-│   │   └── index.tsx            # Main application route
-│   ├── utils/                    # Utility functions
-│   │   ├── __tests__/           # Unit tests
-│   │   ├── metrics.ts           # Typing metrics calculation
-│   │   └── texts.ts             # Sample texts for practice
-│   ├── main.tsx                 # Application entry point
-│   └── styles.css               # Global styles
-├── public/                       # Static assets
-├── dist/                        # Build output
-├── package.json                 # Dependencies and scripts
-├── partykit.json               # PartyKit configuration
-├── tsconfig.json               # TypeScript configuration
-├── vite.config.ts              # Vite configuration
-└── vitest.config.ts            # Testing configuration
-```
-
 ## Getting Started
 
 ### Prerequisites
@@ -263,27 +222,27 @@ The application uses a combination of React Context and local state:
 
 - **TYPING_UPDATE**: Broadcast typing progress
 
-  ```typescript
+  ```json
   {
-    type: 'TYPING_UPDATE',
-    data: {
-      sourceText: string,
-      currentIndex: number,
-      errors: number[],
-      typedText: string,
-      startTime: number | null,
-      finished: boolean
+    "type": "TYPING_UPDATE",
+    "data": {
+      "sourceText": "string",
+      "currentIndex": "number",
+      "errors": "number[]",
+      "typedText": "string",
+      "startTime": "number | null",
+      "finished": "boolean"
     },
-    timestamp: number
+    "timestamp": "number"
   }
   ```
 
 - **SESSION_END**: Signal session completion
-  ```typescript
+  ```json
   {
-    type: 'SESSION_END',
-    data: {},
-    timestamp: number
+    "type": "SESSION_END",
+    "data": {},
+    "timestamp": "number"
   }
   ```
 
@@ -335,15 +294,15 @@ Manages session creation and joining.
 
 #### Metrics Calculation
 
-```typescript
+```ts
 // Calculate Words Per Minute
-calcWPM(charsTyped: number, elapsedMs: number): number
+calcWPM(charsTyped: number, elapsedMs: number): number;
 
 // Calculate accuracy percentage
-calcAccuracy(errors: number, total: number): number
+calcAccuracy(errors: number, total: number): number;
 
 // Format time duration
-formatTime(milliseconds: number): string
+formatTime(milliseconds: number): string;
 ```
 
 ## Development

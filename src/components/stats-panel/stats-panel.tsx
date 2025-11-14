@@ -1,7 +1,7 @@
 import { useTyping } from '../../hooks/use-typing';
 import { useTypingStats } from '../../hooks/use-typing-stats';
-import { formatTime } from '../../utils/metrics';
 import { Icons } from '../../utils/icons';
+import { formatTime } from '../../utils/metrics';
 import StatCard from './stat-card';
 
 export default function StatsPanel() {
