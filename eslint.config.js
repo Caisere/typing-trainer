@@ -37,6 +37,7 @@ export default antfu(
           tsconfigRootDir: '.',
         },
       ],
+      'style/quote-props': 'off',
       'unicorn/filename-case': [
         'error',
         {
