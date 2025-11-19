@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function OfflineIndicator() {
   const [isOnline, setIsOnline] = useState(true);
   const [wasOffline, setWasOffline] = useState(false);
-
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
     // Set initial online state
     setIsOnline(navigator.onLine);
@@ -11,7 +11,7 @@ export default function OfflineIndicator() {
     const handleOnline = () => {
       setIsOnline(true);
       // Keep showing banner briefly after coming back online
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setWasOffline(false);
       }, 3000);
     };
@@ -27,6 +27,11 @@ export default function OfflineIndicator() {
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
     };
   }, []);
 

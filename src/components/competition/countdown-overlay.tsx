@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type CountdownOverlayProps = {
   countdownStartTime: number;
@@ -10,6 +10,7 @@ export default function CountdownOverlay({
   onCountdownComplete,
 }: CountdownOverlayProps) {
   const [count, setCount] = useState(3);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const elapsed = Date.now() - countdownStartTime;
@@ -28,14 +29,20 @@ export default function CountdownOverlay({
       setCount((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
-          setTimeout(onCountdownComplete, 1000);
+          timeoutRef.current = setTimeout(onCountdownComplete, 1000);
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
   }, [countdownStartTime, onCountdownComplete]);
 
   return (

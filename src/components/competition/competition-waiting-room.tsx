@@ -1,4 +1,4 @@
-import type { IconType } from 'react-icons';
+import type { LucideIcon } from 'lucide-react';
 
 import { useNotification } from '@/hooks/use-notification';
 
@@ -47,7 +47,7 @@ export default function CompetitionWaitingRoom({
       </header>
 
       {/* Competition Code */}
-      <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-4 rounded-lg border border-purple-200 mb-6">
+      <div className="bg-linear-to-r from-purple-50 to-blue-50 p-4 rounded-lg border border-purple-200 mb-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-600 mb-1">Competition Code:</p>
@@ -128,7 +128,7 @@ export default function CompetitionWaitingRoom({
             type="button"
             onClick={onStart}
             disabled={!canStart}
-            className="flex-1 px-4 py-3 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-lg hover:from-green-600 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all font-medium shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-4 py-3 bg-linear-to-r from-green-500 to-teal-500 text-white rounded-lg hover:from-green-600 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all font-medium shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {canStart ? '🏁 Start Competition' : 'Waiting for participants...'}
           </button>
@@ -155,7 +155,7 @@ type TimelineEvent = {
   id: string;
   type: 'joined' | 'ready' | 'host';
   participant: Participant;
-  icon: IconType;
+  icon: LucideIcon;
   iconBackground: string;
 };
 

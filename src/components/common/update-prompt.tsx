@@ -11,10 +11,10 @@ export default function UpdatePrompt() {
     updateServiceWorker,
   } = useRegisterSW({
     onRegistered(r) {
-      console.log('SW Registered:', r);
+      console.info('SW Registered:', r);
     },
     onRegisterError(error) {
-      console.log('SW registration error', error);
+      console.error('SW registration error', error);
     },
   });
 
@@ -46,7 +46,7 @@ export default function UpdatePrompt() {
       aria-atomic="true"
     >
       <div className="flex items-start gap-3">
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           {needRefresh
             ? (
                 <svg
@@ -113,7 +113,7 @@ export default function UpdatePrompt() {
         <button
           type="button"
           onClick={close}
-          className="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+          className="shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
           aria-label="Close"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
