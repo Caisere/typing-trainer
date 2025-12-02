@@ -1,4 +1,4 @@
-import { TanstackDevtools } from '@tanstack/react-devtools';
+import { TanStackDevtools } from '@tanstack/react-devtools';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 
@@ -91,7 +91,7 @@ export const Route = createRootRoute({
           </main>
           <UpdatePrompt />
           {import.meta.env.DEV && (
-            <TanstackDevtools
+            <TanStackDevtools
               config={{
                 position: 'bottom-left',
               }}

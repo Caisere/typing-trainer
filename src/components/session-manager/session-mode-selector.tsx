@@ -1,7 +1,7 @@
 import { Icons } from '../../utils/icons';
 
 type SessionModeSelectorProps = {
-  onSelectMode: (mode: 'session' | 'solo' | 'competition') => void;
+  onSelectMode: (mode: 'session' | 'solo' | 'competition' | 'tournament') => void;
 };
 
 export default function SessionModeSelector({
@@ -120,6 +120,43 @@ export default function SessionModeSelector({
             </div>
             <div className="flex-shrink-0">
               <Icons.Add className="text-orange-400 dark:text-orange-500 group-hover:text-orange-600 dark:group-hover:text-orange-400" size={24} />
+            </div>
+          </div>
+        </button>
+
+        {/* Tournament Mode */}
+        <button
+          type="button"
+          onClick={() => onSelectMode('tournament')}
+          className="w-full p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/30 dark:to-pink-950/30 rounded-lg border-2 border-purple-200 dark:border-purple-800 hover:border-purple-400 dark:hover:border-purple-600 transition-all text-left group"
+        >
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0">
+              <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 dark:from-purple-600 dark:to-pink-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Icons.Trophy className="text-white" size={24} />
+              </div>
+            </div>
+            <div className="flex-1">
+              <h2 className="text-xl font-semibold text-purple-800 dark:text-purple-300 mb-2">
+                Tournament Mode
+              </h2>
+              <p className="text-purple-600 dark:text-purple-400 text-sm">
+                Compete in bracket-style tournaments with multiple rounds
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="text-xs px-2 py-1 bg-purple-100 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 rounded-full">
+                  Brackets
+                </span>
+                <span className="text-xs px-2 py-1 bg-purple-100 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 rounded-full">
+                  Elimination
+                </span>
+                <span className="text-xs px-2 py-1 bg-purple-100 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 rounded-full">
+                  Multiple Rounds
+                </span>
+              </div>
+            </div>
+            <div className="flex-shrink-0">
+              <Icons.Add className="text-purple-400 dark:text-purple-500 group-hover:text-purple-600 dark:group-hover:text-purple-400" size={24} />
             </div>
           </div>
         </button>

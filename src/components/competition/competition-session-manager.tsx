@@ -50,7 +50,7 @@ export default function CompetitionSessionManager({
 
       <div className="space-y-6">
         {/* Create Competition */}
-        <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-950/20 dark:to-blue-950/20 p-6 rounded-lg border border-purple-200 dark:border-purple-800">
+        <div className="bg-linear-to-r from-purple-50 to-blue-50 dark:from-purple-950/20 dark:to-blue-950/20 p-6 rounded-lg border border-purple-200 dark:border-purple-800">
           <FormSection
             title="Create Competition"
             description="Start a new competition and invite others to race"
@@ -90,7 +90,7 @@ export default function CompetitionSessionManager({
         </div>
 
         {/* Join Competition */}
-        <div className="bg-gradient-to-r from-green-50 to-teal-50 dark:from-green-950/20 dark:to-teal-950/20 p-6 rounded-lg border border-green-200 dark:border-green-800">
+        <div className="bg-linear-to-r from-green-50 to-teal-50 dark:from-green-950/20 dark:to-teal-950/20 p-6 rounded-lg border border-green-200 dark:border-green-800">
           <FormSection
             title="Join Competition"
             description="Enter a competition code to join an existing race"

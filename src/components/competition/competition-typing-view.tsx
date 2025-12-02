@@ -36,8 +36,13 @@ function CompetitionTypingContent({
   onFinish,
 }: CompetitionTypingViewProps) {
   const { state } = useTyping();
-  const lastUpdateRef = useRef(Date.now());
+  const lastUpdateRef = useRef<number>(0);
   const hasFinishedRef = useRef(false);
+
+  // Initialize lastUpdateRef on mount
+  useEffect(() => {
+    lastUpdateRef.current = Date.now();
+  }, []);
 
   // Throttled stats update
   const sendStatsUpdate = useCallback(() => {

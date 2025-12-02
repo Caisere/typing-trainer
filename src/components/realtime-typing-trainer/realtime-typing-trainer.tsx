@@ -56,7 +56,7 @@ function RealtimeTypingTrainerContent({
   );
 
   const handleBackToSessions = () => {
-    window.location.href = '/';
+    window.location.href = '/sessions';
   };
 
   if (connectionError && sessionId !== 'solo') {

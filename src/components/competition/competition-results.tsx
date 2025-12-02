@@ -20,7 +20,7 @@ export default function CompetitionResults({
   const topThree = leaderboard.slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 dark:from-purple-950/20 dark:via-blue-950/20 dark:to-pink-950/20 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-purple-50 via-blue-50 to-pink-50 dark:from-purple-950/20 dark:via-blue-950/20 dark:to-pink-950/20 flex items-center justify-center p-4">
       <div className="max-w-4xl w-full bg-white dark:bg-zinc-900 rounded-lg shadow-2xl p-8">
         {/* Header */}
         <header className="text-center mb-8">
@@ -101,7 +101,7 @@ export default function CompetitionResults({
           <button
             type="button"
             onClick={onRaceAgain}
-            className="flex-1 px-6 py-3 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-lg hover:from-green-600 hover:to-teal-600 font-semibold shadow-lg transition-all flex items-center justify-center gap-2"
+            className="flex-1 px-6 py-3 bg-linear-to-r from-green-500 to-teal-500 text-white rounded-lg hover:from-green-600 hover:to-teal-600 font-semibold shadow-lg transition-all flex items-center justify-center gap-2"
           >
             <Icons.Reload size={20} />
             Race Again
@@ -109,7 +109,7 @@ export default function CompetitionResults({
           <button
             type="button"
             onClick={onNewCompetition}
-            className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg hover:from-purple-600 hover:to-blue-600 font-semibold shadow-lg transition-all flex items-center justify-center gap-2"
+            className="flex-1 px-6 py-3 bg-linear-to-r from-purple-500 to-blue-500 text-white rounded-lg hover:from-purple-600 hover:to-blue-600 font-semibold shadow-lg transition-all flex items-center justify-center gap-2"
           >
             <Icons.Add size={20} />
             New Competition
@@ -132,7 +132,7 @@ function EnhancedStatCard({
   isHighlighted?: boolean;
 }) {
   return (
-    <div className={`bg-white dark:bg-zinc-900 px-4 py-6 sm:px-6 lg:px-8 ${isHighlighted ? 'bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/30 dark:to-blue-950/30' : ''}`}>
+    <div className={`bg-white dark:bg-zinc-900 px-4 py-6 sm:px-6 lg:px-8 ${isHighlighted ? 'bg-linear-to-br from-purple-50 to-blue-50 dark:from-purple-950/30 dark:to-blue-950/30' : ''}`}>
       <p className={`text-sm/6 font-medium ${isHighlighted ? 'text-purple-700 dark:text-purple-400' : 'text-gray-500 dark:text-gray-400'}`}>
         {name}
       </p>
@@ -186,7 +186,7 @@ function PodiumCard({
       }`}
     >
       <div
-        className={`bg-gradient-to-b ${colors[position as keyof typeof colors]} text-white rounded-t-lg px-6 py-4 ${heights[position as keyof typeof heights]} flex flex-col items-center justify-center shadow-lg`}
+        className={`bg-linear-to-b ${colors[position as keyof typeof colors]} text-white rounded-t-lg px-6 py-4 ${heights[position as keyof typeof heights]} flex flex-col items-center justify-center shadow-lg`}
       >
         <div className="mb-2">
           <MedalComponent />

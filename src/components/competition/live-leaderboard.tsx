@@ -79,7 +79,7 @@ function LeaderboardCard({ entry }: { entry: LeaderboardEntry }) {
       }`}
     >
       {/* Rank Badge */}
-      <div className="absolute -top-2 -left-2 w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 text-white font-bold flex items-center justify-center text-sm shadow-lg">
+      <div className="absolute -top-2 -left-2 w-8 h-8 rounded-full bg-linear-to-br from-purple-500 to-blue-500 text-white font-bold flex items-center justify-center text-sm shadow-lg">
         {getMedalIcon(entry.rank)}
       </div>
 
@@ -130,7 +130,7 @@ function LeaderboardCard({ entry }: { entry: LeaderboardEntry }) {
                   </span>
                   <div className="w-16 h-2 bg-gray-200 dark:bg-zinc-700 rounded-full mt-1">
                     <div
-                      className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-300"
+                      className="h-full bg-linear-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-300"
                       style={{ width: `${entry.progress}%` }}
                     />
                   </div>

@@ -9,7 +9,12 @@ export default function CountdownOverlay({
   countdownStartTime,
   onCountdownComplete,
 }: CountdownOverlayProps) {
-  const [count, setCount] = useState(3);
+  // Initialize count with lazy calculation
+  const [count, setCount] = useState(() => {
+    const elapsed = Date.now() - countdownStartTime;
+    const remaining = 3000 - elapsed;
+    return remaining <= 0 ? 0 : Math.ceil(remaining / 1000);
+  });
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -20,10 +25,6 @@ export default function CountdownOverlay({
       onCountdownComplete();
       return;
     }
-
-    // Calculate initial count based on elapsed time
-    const initialCount = Math.ceil(remaining / 1000);
-    setCount(initialCount);
 
     const interval = setInterval(() => {
       setCount((prev) => {

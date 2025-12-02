@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'motion/react';
+import { useEffect, useState } from 'react';
 
 import { TypingProvider } from '../context/typing-context';
 import { useTyping } from '../hooks/use-typing';
@@ -11,7 +12,7 @@ import TypingInput from './typing-input/typing-input';
 
 const CUSTOM_404_TEXT = `Oops! This page took a wrong turn and got lost in cyberspace. But hey, since you're here, why not practice your typing skills? Complete this challenge to unlock your way back home!`;
 
-function Stats404() {
+function Stats404({ currentTime }: { currentTime: number }) {
   const { state } = useTyping();
   const { typedText, startTime, endTime, errors, sourceText } = state;
 
@@ -19,7 +20,7 @@ function Stats404() {
   const timeElapsed = endTime
     ? (endTime - (startTime || 0)) / 1000 / 60
     : startTime
-      ? (Date.now() - startTime) / 1000 / 60
+      ? (currentTime - startTime) / 1000 / 60
       : 0;
 
   const wordsTyped = typedText.trim().split(/\s+/).length;
@@ -49,6 +50,19 @@ function Stats404() {
 
 function NotFound404Content() {
   const { state } = useTyping();
+  const [currentTime, setCurrentTime] = useState(0);
+
+  useEffect(() => {
+    if (!state.startTime || state.finished) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [state.startTime, state.finished]);
 
   return (
     <motion.div
@@ -88,7 +102,7 @@ function NotFound404Content() {
           <TypingInput />
 
           {/* Stats */}
-          {state.startTime && <Stats404 />}
+          {state.startTime && <Stats404 currentTime={currentTime} />}
 
           {/* Navigation Buttons */}
           <div className="flex flex-col gap-4 items-center pt-6 border-t border-gray-200">

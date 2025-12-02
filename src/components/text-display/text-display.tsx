@@ -10,10 +10,10 @@ export default function TextDisplay() {
   // Auto-scroll to keep current character visible
   useEffect(
     function autoScroll() {
-      if (containerRef.current && currentIndex > 0) {
+      if (containerRef.current && currentWordIndex > 0) {
         const container = containerRef.current;
         const currentCharElement = container.children[
-          currentIndex
+          currentWordIndex
         ] as HTMLElement;
 
         if (currentCharElement) {
@@ -38,7 +38,7 @@ export default function TextDisplay() {
         }
       }
     },
-    [currentIndex],
+    [currentWordIndex],
   );
 
   // Reset scroll position when typing is finished
@@ -131,7 +131,7 @@ export default function TextDisplay() {
     <div className="w-full bg-gray-50 dark:bg-zinc-800 p-6 rounded-lg border-2 border-gray-200 dark:border-zinc-700 focus-within:border-blue-400 dark:focus-within:border-blue-500 transition-colors">
       <div
         ref={containerRef}
-        className="notranslate h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] break-words leading-relaxed select-none overflow-auto"
+        className="notranslate h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] wrap-break-words leading-relaxed select-none overflow-auto"
         aria-live="polite"
         aria-label="Typing practice text"
         role="textbox"

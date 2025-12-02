@@ -1,7 +1,7 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 
-import { Button } from '../button';
 import { Icons } from '../../utils/icons';
+import { Button } from '../button';
 
 type ConfirmModalProps = {
   isOpen: boolean;

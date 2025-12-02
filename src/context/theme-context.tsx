@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+
 import { createContext, use, useEffect, useState } from 'react';
 
 type ThemeMode = 'light' | 'dark' | 'auto';
@@ -14,14 +15,16 @@ export const THEME_COLORS = {
 export type ThemeColor = keyof typeof THEME_COLORS;
 
 function getStoredThemeMode(): ThemeMode {
-  if (typeof window === 'undefined') return 'auto';
+  if (typeof window === 'undefined')
+    return 'auto';
   try {
     const storedTheme = localStorage.getItem(THEME_KEY);
     if (storedTheme === 'light' || storedTheme === 'dark' || storedTheme === 'auto') {
       return storedTheme;
     }
     return 'auto';
-  } catch {
+  }
+  catch {
     return 'auto';
   }
 }
@@ -29,11 +32,13 @@ function getStoredThemeMode(): ThemeMode {
 function setStoredThemeMode(theme: ThemeMode) {
   try {
     localStorage.setItem(THEME_KEY, theme);
-  } catch {}
+  }
+  catch {}
 }
 
 function getSystemTheme(): ResolvedTheme {
-  if (typeof window === 'undefined') return 'light';
+  if (typeof window === 'undefined')
+    return 'light';
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
@@ -57,25 +62,25 @@ function updateThemeClass(themeMode: ThemeMode) {
 }
 
 function getNextTheme(current: ThemeMode): ThemeMode {
-  const themes: ThemeMode[] =
-    getSystemTheme() === 'dark'
+  const themes: ThemeMode[]
+    = getSystemTheme() === 'dark'
       ? ['auto', 'light', 'dark']
       : ['auto', 'dark', 'light'];
   return themes[(themes.indexOf(current) + 1) % themes.length];
 }
 
-interface ThemeContextProps {
+type ThemeContextProps = {
   themeMode: ThemeMode;
   resolvedTheme: ResolvedTheme;
   setTheme: (theme: ThemeMode) => void;
   toggleMode: () => void;
-}
+};
 
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
-interface ThemeProviderProps {
+type ThemeProviderProps = {
   children: ReactNode;
-}
+};
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [themeMode, setThemeMode] = useState<ThemeMode>(getStoredThemeMode);

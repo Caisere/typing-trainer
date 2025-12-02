@@ -1,33 +1,26 @@
-import { useEffect, useState } from 'react';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 
 // Component for showing PWA update notifications
 export default function UpdatePrompt() {
-  const [showPrompt, setShowPrompt] = useState(false);
-
   const {
     offlineReady: [offlineReady, setOfflineReady],
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = useRegisterSW({
     onRegistered(r) {
-      console.info('SW Registered:', r);
+      console.warn('SW Registered:', r);
     },
     onRegisterError(error) {
       console.error('SW registration error', error);
     },
   });
 
-  useEffect(() => {
-    if (needRefresh || offlineReady) {
-      setShowPrompt(true);
-    }
-  }, [needRefresh, offlineReady]);
+  // Derive showPrompt directly from needRefresh and offlineReady
+  const showPrompt = needRefresh || offlineReady;
 
   const close = () => {
     setOfflineReady(false);
     setNeedRefresh(false);
-    setShowPrompt(false);
   };
 
   const handleUpdate = () => {

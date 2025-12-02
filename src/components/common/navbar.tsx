@@ -76,7 +76,11 @@ export default function Navbar() {
               className="relative rounded-full p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-purple-500 transition-colors"
               title={`Theme: ${themeMode}`}
             >
-              <span className="sr-only">Toggle theme (currently {themeMode})</span>
+              <span className="sr-only">
+                Toggle theme (currently
+                {themeMode}
+                )
+              </span>
               {themeMode === 'light' && <Icons.Sun aria-hidden="true" className="size-5" />}
               {themeMode === 'dark' && <Icons.Moon aria-hidden="true" className="size-5" />}
               {themeMode === 'auto' && <Icons.Sparkles aria-hidden="true" className="size-5" />}

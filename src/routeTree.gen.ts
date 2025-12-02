@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TournamentRouteImport } from './routes/tournament'
 import { Route as SpectatorRouteImport } from './routes/spectator'
 import { Route as SoloRouteImport } from './routes/solo'
 import { Route as SettingsRouteImport } from './routes/settings'
@@ -16,6 +17,11 @@ import { Route as SessionRouteImport } from './routes/session'
 import { Route as CompetitionRouteImport } from './routes/competition'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TournamentRoute = TournamentRouteImport.update({
+  id: '/tournament',
+  path: '/tournament',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SpectatorRoute = SpectatorRouteImport.update({
   id: '/spectator',
   path: '/spectator',
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute
   '/solo': typeof SoloRoute
   '/spectator': typeof SpectatorRoute
+  '/tournament': typeof TournamentRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/solo': typeof SoloRoute
   '/spectator': typeof SpectatorRoute
+  '/tournament': typeof TournamentRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute
   '/solo': typeof SoloRoute
   '/spectator': typeof SpectatorRoute
+  '/tournament': typeof TournamentRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,8 +90,16 @@ export interface FileRouteTypes {
     | '/settings'
     | '/solo'
     | '/spectator'
+    | '/tournament'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/competition' | '/session' | '/settings' | '/solo' | '/spectator'
+  to:
+    | '/'
+    | '/competition'
+    | '/session'
+    | '/settings'
+    | '/solo'
+    | '/spectator'
+    | '/tournament'
   id:
     | '__root__'
     | '/'
@@ -91,6 +108,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/solo'
     | '/spectator'
+    | '/tournament'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -100,10 +118,18 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRoute
   SoloRoute: typeof SoloRoute
   SpectatorRoute: typeof SpectatorRoute
+  TournamentRoute: typeof TournamentRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tournament': {
+      id: '/tournament'
+      path: '/tournament'
+      fullPath: '/tournament'
+      preLoaderRoute: typeof TournamentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/spectator': {
       id: '/spectator'
       path: '/spectator'
@@ -156,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRoute: SettingsRoute,
   SoloRoute: SoloRoute,
   SpectatorRoute: SpectatorRoute,
+  TournamentRoute: TournamentRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

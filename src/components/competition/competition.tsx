@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useCompetition } from '../../hooks/use-competition';
 import CompetitionResults from './competition-results';
@@ -32,26 +32,18 @@ export default function Competition({
     leaveCompetition,
   } = useCompetition(competitionId, userId);
 
-  const [showCountdown, setShowCountdown] = useState(false);
-  const [hasJoined, setHasJoined] = useState(false);
+  const hasJoinedRef = useRef(false);
 
   // Auto-join when connected
   useEffect(() => {
-    if (isConnected && !hasJoined) {
+    if (isConnected && !hasJoinedRef.current) {
       joinCompetition(username);
-      setHasJoined(true);
+      hasJoinedRef.current = true;
     }
-  }, [isConnected, hasJoined, joinCompetition, username, competitionId]);
+  }, [isConnected, joinCompetition, username, competitionId]);
 
-  // Handle countdown state
-  useEffect(() => {
-    if (session?.state === 'countdown' && !showCountdown) {
-      setShowCountdown(true);
-    }
-    if (session?.state === 'active' && showCountdown) {
-      setShowCountdown(false);
-    }
-  }, [session?.state, showCountdown]);
+  // Derive countdown state from session state
+  const showCountdown = session?.state === 'countdown';
 
   const handleLeave = () => {
     leaveCompetition();
@@ -117,7 +109,7 @@ export default function Competition({
       {showCountdown && session.countdownStartTime && (
         <CountdownOverlay
           countdownStartTime={session.countdownStartTime}
-          onCountdownComplete={() => setShowCountdown(false)}
+          onCountdownComplete={() => {}}
         />
       )}
 

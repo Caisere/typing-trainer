@@ -1,6 +1,6 @@
-import antfu from '@antfu/eslint-config';
+import setemiojo from '@setemiojo/eslint-config';
 
-// export default antfu({
+// export default setemiojo({
 //   formatters: true,
 //   react: true,
 // }, {
@@ -9,7 +9,7 @@ import antfu from '@antfu/eslint-config';
 //   },
 // })
 
-export default antfu(
+export default setemiojo(
   {
     type: 'app',
     typescript: true,
