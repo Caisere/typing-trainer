@@ -80,7 +80,7 @@ export default function CompetitionSessionManager({
               </>
             )}
             onSubmit={handleCreateCompetition}
-            submitDisabled={!createUsername.trim() || createUsername.length < 3}
+            submitDisabled={!createUsername.trim() || createUsername.trim().length < 3}
             className="mt-0"
           />
         </div>
@@ -123,7 +123,7 @@ export default function CompetitionSessionManager({
               </>
             )}
             onSubmit={handleJoinCompetition}
-            submitDisabled={!joinCode.trim() || !joinUsername.trim() || joinUsername.length < 3}
+            submitDisabled={!joinCode.trim() || !joinUsername.trim() || joinUsername.trim().length < 3}
             className="mt-0"
           />
         </div>
